@@ -129,15 +129,20 @@ export default function UploadCard() {
         }),
       });
 
-      const data = await response.json();
+      const data = (await response.json()) as { imageUrl?: string; error?: string };
 
       if (!response.ok) {
         throw new Error(data.error || "헤드샷 생성에 실패했습니다.");
       }
 
-      setGeneratedUrl(data.imageUrl);
-    } catch (err: any) {
-      setError(err.message || "서버 통신 중 에러가 발생했습니다. 다시 시도해 주세요.");
+      if (data.imageUrl) {
+        setGeneratedUrl(data.imageUrl);
+      } else {
+        throw new Error("생성된 이미지 주소가 존재하지 않습니다.");
+      }
+    } catch (err: unknown) {
+      const errMsg = err instanceof Error ? err.message : "서버 통신 중 에러가 발생했습니다. 다시 시도해 주세요.";
+      setError(errMsg);
     } finally {
       setIsLoading(false);
     }
@@ -156,7 +161,7 @@ export default function UploadCard() {
       a.click();
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
-    } catch (err) {
+    } catch {
       setError("PNG 다운로드에 실패했습니다. 마우스 우클릭 후 다른 이름으로 저장을 이용해주세요.");
     }
   };

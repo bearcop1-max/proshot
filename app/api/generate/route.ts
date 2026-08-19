@@ -55,6 +55,7 @@ export async function POST(request: Request) {
     }
 
     // 5. fal.subscribe("fal-ai/flux-pulid") 호출
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const result: any = await fal.subscribe("fal-ai/flux-pulid", {
       input: {
         prompt,

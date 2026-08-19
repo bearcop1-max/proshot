@@ -1,4 +1,3 @@
-import Image from "next/image";
 import UploadCard from "./components/UploadCard";
 
 export default function Home() {
